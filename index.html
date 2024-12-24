@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+/* 
+------------------------ css ---------------------------------
+*/
+        .outer-div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 93vh;
+            width: 95vw;
+            /* border: solid 10px black;
+            border-radius: 30px; */
+            margin: 0;
+        }
+    
+        .inner-div {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 90%;
+            width: 85%;
+        }
+        .inContent {
+            font-family: sans-serif;
+            padding: 0;
+            top: -100px;
+            margin: 0;
+            font-weight: bold;
+            font-size: 260px;
+        }
+        p {
+            font-family: sans-serif;
+            margin: 0;
+            font-size: 200px;
+            font-weight: bold;
+        }
+        img {
+            width: 300px;
+        }
+
+    </style>
+</head>
+<!-- 
+------------------------ html ---------------------------------
+-->
+
+<body id="body" style="background-color: grey;">
+    <div class="outer-div">
+        <div class="inContent"></div>
+        <p></p>
+    </div>
+    
+<!-- 
+------------------------ script ------------------------------
+-->
+    <script>
+        // ------- DONE ------------------
+        // 
+        // THIS FUNCTION RETURNING TIME
+        // FORMAT IS LIKE THIS: 10:22
+        // ------- CLOCK -----------------
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();   // 0–23
+            let minutes = now.getMinutes(); // 0–59
+            const seconds = now.getSeconds(); // 0–59
+
+            if (minutes < 10 ) {minutes = "0"+minutes;}
+            if (hours < 10 ) {hours = "0"+hours;}
+            if (hours > 12 && hours < 22) {hours = "0"+(hours-12);}
+            if (hours > 21 && hours != 0) { hours = hours - 12; }
+            if (hours == 0) { hours = hours + 12; }
+            
+            return `${hours}:${minutes}`;
+
+            // document.getElementById("body").innerHTML = 
+            // `<div class="outer-div">
+            // <div class="inContent" id="time">
+            //     ${hours}:${minutes}
+            // </div>
+            // <p>${getAmPm()}</p>
+            // </div>`;x`
+        }
+
+        // RETURN "AM" OR "PM"
+        function getAmPm() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            const seconds = String(now.getSeconds()).padStart(2, "0");
+
+            const period = hours >= 12 ? "PM" : "AM";
+            return period;
+        }
+
+        // RETURN DAY EXAMPLE: "Saturday"
+        // -------- DAY ------------------
+        
+        function dateDay() {
+            const currentDate = new Date();
+            const currentDayOfWeek = currentDate.getDay();
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const currentDayName = days[currentDayOfWeek];
+            
+            return currentDayName;
+        }
+        
+        // ------- MONTH DATE YEAR ------------
+        
+        // RETURN MONTH
+        function currentMonth() {
+            const monthArray = ["January","February","March","April","May","June","July","August","September","October","November","December"];  
+            const currentDate = new Date();
+            return monthArray[currentDate.getMonth()];
+        }
+        // RETURN DATE NUMBER
+        function currentDate() {
+            const currentDate = new Date();
+            return currentDate.getDate();
+        }
+        // RETURN YEAR NUMBER
+        function currentYear() {
+            const currentDate = new Date();
+            return currentDate.getFullYear();
+        }
+        // ------ WEATHER ----------------
+
+        const API_KEY = 'd0eeaa9ab8633b7017a358110f38ee04';
+        const CITY = 'Doha';
+        const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`;
+
+        async function getTemperature() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const temp = data.main.temp;
+                return temp;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                return null;             }
+        }
+
+        async function weatherIcon() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const iconCode = data.weather[0].icon;
+                const wIcon = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+                return wIcon;
+
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                return null;
+            }
+        }
+
+        async function currentTemperature() {
+            const wIcon = await weatherIcon();
+            const temp = await getTemperature();
+            let _weather = 
+                `<div class="outer-div">
+                    <img src="${wIcon}">
+                    <div class="inContent" style="font-size: 170px; margin: 0; position: relative; top: -50px">
+                        ${temp}°C
+                    </div>
+                </div>`
+            if (temp) {
+                document.getElementById("body").innerHTML = _weather;
+            }
+        }
+
+       
+        let counter = 0
+        // loop ther function
+        setInterval(() => {
+            let _time = 
+            `<div class="outer-div">
+                <div class="inContent">
+                    ${updateTime()}
+                </div>
+                <p style="font-size: 150px">${getAmPm()}</p>
+            </div>`
+
+            let _day = 
+            `<div class="outer-div">
+                <div class="inContent" style="font-size: 150px;">
+                    ${dateDay()}
+                </div>
+            </div>`
+
+            let _date = 
+            `<div class="outer-div">
+                <div class="inContent" style="font-size: 150px;">
+                    ${currentDate()}
+                </div>
+                <div class="inContent" style="font-size: 140px;">
+                    ${currentMonth()}
+                </div>
+                <div class="inContent" style="font-size: 150px;">
+                    ${currentYear()}
+                </div>
+            </div>`
+            
+            function timeTime(){
+                document.getElementById("body").innerHTML = _time;
+            }
+
+            function dayDay(){
+                document.getElementById("body").innerHTML = _day;
+            }
+
+            function dateDate(){
+                document.getElementById("body").innerHTML = _date;
+            }
+
+            // list of function
+            const pageContent = [timeTime, dayDay, timeTime, dateDate, timeTime, currentTemperature];
+            pageContent[counter]();
+            counter++;
+            if (counter > 5) counter = 0; 
+        
+            },3000
+        );
+
+    </script>
+</body>
+</html>

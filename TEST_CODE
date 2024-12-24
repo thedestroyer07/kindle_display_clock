@@ -1,0 +1,179 @@
+New kindle clock
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+  
+  <style>
+    .outer-div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 768px;
+      width:1024px;
+      border: solid 10px grey;
+      border-radius: 50px;
+      margin: 0;
+    }
+  
+    .inner-div {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 90%;
+      width: 85%;
+    }
+    .inContent {
+      padding: 0;
+      top: -100px;
+      margin: 0;
+      font-weight: bold;
+      font-size: 400px;
+    }
+  p {
+    margin: 0;
+    font-size: 200px;
+    font-weight: bold;
+  }
+  </style>
+</head>
+<body style="margin:0;" id="body">
+  
+<script>
+    function getAmPm() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+
+        const period = hours >= 12 ? "PM" : "AM";
+        return period;
+      }
+  
+      function updateTime() {
+        let dwn = "<br>";
+        const now = new Date();
+        let hours = now.getHours();   // 0–23
+        let minutes = now.getMinutes(); // 0–59
+        const seconds = now.getSeconds(); // 0–59
+        if (minutes <= 9 ) {minutes = "0"+minutes;}
+        if (hours > 12) {hours = "0"+(hours-12);}
+        document.getElementById("body").innerHTML = 
+        `<div class="outer-div">
+          <div class="inContent" id="time">
+            ${hours}:${minutes}
+          </div>
+          <p>${getAmPm()}</p>
+         </div>`;
+      }
+ //----
+const API_KEY = 'd0eeaa9ab8633b7017a358110f38ee04';
+const CITY = 'Doha';
+const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${CITY}&units=metric&appid=${API_KEY}`;
+  
+  function weather() {
+    fetch(API_URL)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const temp = data.main.temp;
+        const city = data.weather[0].icon;
+        const wIcon = `https://openweathermap.org/img/wn/${city}@2x.png`;
+        const weatherInfo = 
+        `<div class="outer-div">
+          <div class="inContent" id="time" style="font-size: 17em;">
+            ${temp}°C
+          </div>
+          <img src="${wIcon}" style="width: 250px;">
+         </div>`;
+        document.getElementById('body').innerHTML = weatherInfo;
+      })
+      .catch(error => {
+        console.error('Error fetching weather data:', error);
+        //document.getElementById('location').textContent = 'Unable to fetch weather data.';
+      });}
+  //----
+  
+  let interval = 0;
+  
+  setInterval(()=>{
+    if (interval == 0) {
+      updateTime();
+      interval = 1;
+    }
+    else { 
+      weather();
+      interval = 0;
+    }},2000
+  );
+</script>
+</body>
+</html>
+--------------------------------------------
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+  
+  <style>
+  
+  </style>
+  
+</head>
+<body>
+  <h1 id="main">
+  </h1>
+  
+  <script>
+    const currentDate = new Date();
+    const currentDayOfWeek = currentDate.getDay();
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const currentDayName = days[currentDayOfWeek];
+    const dateDay = `Today is: ${currentDayName}`;
+    document.getElementById("main").innerHTML = dateDay;
+  </script>
+</body>
+</html>
+
+
+
+--------------------------
+
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Hello, World!</title>
+</head>
+<body>
+  <h1 id="load">
+    Hello, World!
+  </h1>
+  
+  <script>
+    const monthArray = ["Jan","Fen","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];  
+    const currentDate = new Date();
+    const day = currentDate.getDate();
+    const month = monthArray[currentDate.getMonth()];
+    const year = currentDate.getFullYear();
+    document.getElementById("load").innerHTML = `${day}&nbsp/&nbsp${month}&nbsp/&nbsp${year}`;
+  </script> 
+  
+</body>
+</html>
