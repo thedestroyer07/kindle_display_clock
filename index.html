@@ -172,7 +172,8 @@
 
         async function currentTemperature() {
             const wIcon = await weatherIcon();
-            const temp = await Math.round(getTemperature());
+            let temp = await getTemperature();
+            temp = Math.round(temp);
             let _weather = 
                 `<div class="outer-div">
                     <img src="${wIcon}">
