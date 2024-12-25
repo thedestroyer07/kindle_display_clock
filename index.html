@@ -34,6 +34,7 @@
             padding: 0;
             top: -100px;
             margin: 0;
+            padding-left: 20px;
             font-weight: bold;
             font-size: 260px;
         }
@@ -171,7 +172,7 @@
 
         async function currentTemperature() {
             const wIcon = await weatherIcon();
-            const temp = await getTemperature();
+            const temp = await Math.round(getTemperature());
             let _weather = 
                 `<div class="outer-div">
                     <img src="${wIcon}">
@@ -198,7 +199,7 @@
 
             let _day = 
             `<div class="outer-div">
-                <div class="inContent" style="font-size: 150px;">
+                <div class="inContent" style="font-size: 125px;">
                     ${dateDay()}
                 </div>
             </div>`
