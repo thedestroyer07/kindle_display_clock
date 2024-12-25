@@ -109,7 +109,7 @@
         function dateDay() {
             const currentDate = new Date();
             const currentDayOfWeek = currentDate.getDay();
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const currentDayName = days[currentDayOfWeek];
             
             return currentDayName;
@@ -177,7 +177,7 @@
             let _weather = 
                 `<div class="outer-div">
                     <img src="${wIcon}">
-                    <div class="inContent" style="font-size: 170px; margin: 0; position: relative; top: -50px">
+                    <div class="inContent" style="font-size: 200px; margin: 0; position: relative; top: -50px">
                         ${temp}°C
                     </div>
                 </div>`
@@ -200,7 +200,7 @@
 
             let _day = 
             `<div class="outer-div">
-                <div class="inContent" style="font-size: 125px;">
+                <div class="inContent" style="font-size: 300px;">
                     ${dateDay()}
                 </div>
             </div>`
