@@ -79,7 +79,7 @@
             if (hours < 10 ) {hours = "0"+hours;}
             if (hours > 12 && hours < 22) {hours = "0"+(hours-12);}
             if (hours > 21 && hours != 0) { hours = hours - 12; }
-            if (hours == 0) { hours = hours + 12; }
+            if (hours == 0) { hours = 12; }
             
             return `${hours}:${minutes}`;
 
